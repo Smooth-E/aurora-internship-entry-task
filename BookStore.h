@@ -14,9 +14,11 @@ private:
 public:
   BookStore();
 
+  ~BookStore();
+
   int addBook(Book *_book);
 
-  int removeBook(std::string _title);
+  Book *removeBook(std::string _title);
 
   Book *findBook(std::string _title) const;
 

@@ -30,6 +30,8 @@ public:
   float getPrice() const;
 
   int setPrice(float price);
+
+  std::string to_string() const;
 };
 
 #endif // BOOK_H

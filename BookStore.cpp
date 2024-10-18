@@ -6,6 +6,14 @@
 
 BookStore::BookStore() { this->books = {}; }
 
+// It would be better to use smart pointers because this does not enusre some
+// books are not used outside of the store
+BookStore::~BookStore() {
+  for (Book *book : books) {
+    delete book;
+  }
+}
+
 int BookStore::addBook(Book *_book) {
   if (findBook(_book->getName()) != NULL) {
     return 1;
@@ -15,15 +23,16 @@ int BookStore::addBook(Book *_book) {
   return 0;
 }
 
-int BookStore::removeBook(std::string _title) {
+Book *BookStore::removeBook(std::string _title) {
   for (int i = 0; i < books.size(); i++) {
     if (books.at(i)->getName() == _title) {
+      Book *removed = books.at(i);
       books.erase(books.begin() + i);
-      return 0;
+      return removed;
     }
   }
 
-  return 1;
+  return NULL;
 }
 
 Book *BookStore::findBook(std::string _title) const {

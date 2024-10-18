@@ -55,3 +55,9 @@ int Book::setPrice(float price) {
   this->price = price;
   return 0;
 }
+
+std::string Book::to_string() const {
+  return "Книга(Название: " + name + ", Автор: " + author +
+         ", Год публикации: " + std::to_string(publicationYear) +
+         ", Цена: " + std::to_string(price) + " у.е.)";
+}
