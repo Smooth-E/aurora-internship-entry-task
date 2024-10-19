@@ -13,23 +13,24 @@ private:
   float price;
 
 public:
-  Book(std::string name, std::string author, int publicationYear, float price);
+  Book(std::string _name, std::string _author, int _publicationYear,
+       float _price);
 
   std::string getName() const;
 
-  int setName(std::string name);
+  int setName(std::string _name);
 
   std::string getAuthor() const;
 
-  int setAuthor(std::string author);
+  int setAuthor(std::string _author);
 
   int getPublicationYear() const;
 
-  int setPublicationYear(int year);
+  int setPublicationYear(int _year);
 
   float getPrice() const;
 
-  int setPrice(float price);
+  int setPrice(float _price);
 
   std::string to_string() const;
 };
