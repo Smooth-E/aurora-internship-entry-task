@@ -1,6 +1,7 @@
 #include "Book.h"
 #include "BookStore.h"
 #include <iostream>
+#include <memory>
 
 BookStore bookStore;
 
@@ -63,7 +64,7 @@ void addBook() {
       << std::endl;
   std::cin >> author >> name >> year >> price;
 
-  Book *book = new Book(name, author, year, price);
+  std::shared_ptr<Book> book(new Book(name, author, year, price));
   if (bookStore.addBook(book) == 0) {
     std::cout << "Книга добавлена" << std::endl;
   } else {
@@ -76,10 +77,9 @@ void removeBook() {
   std::cout << "Введите название книги, которую хотите удалить" << std::endl;
   std::cin >> title;
 
-  Book *removed = bookStore.removeBook(title);
+  auto removed = bookStore.removeBook(title);
   if (removed != NULL) {
     std::cout << "Книга успешно удалена" << std::endl;
-    delete removed;
   } else {
     std::cout << "Такой книги в хранилище нет" << std::endl;
   }
@@ -90,14 +90,12 @@ void searchBook() {
   std::string name;
   std::cin >> name;
 
-  Book *book = bookStore.findBook(name);
+  auto book = bookStore.findBook(name);
   if (book == NULL) {
     std::cout << "Ничего не найдено" << std::endl;
   } else {
     std::cout << "Что-то нашлось:" << std::endl
-              << "Книга(" << book->getName() << ", " << book->getAuthor()
-              << ", " << book->getPublicationYear() << ", " << book->getPrice()
-              << " у.е., " << std::endl;
+              << book->to_string() << std::endl;
   }
 }
 
@@ -116,7 +114,7 @@ void listBooks() {
     bool validChoice = true;
     switch (choice) {
     case 1:
-      sortType = SortType::NY_NAME;
+      sortType = SortType::BY_NAME;
       break;
     case 2:
       sortType = SortType::BY_AUTHOR;
@@ -135,10 +133,10 @@ void listBooks() {
     }
   }
 
-  std::vector<Book *> sorted = bookStore.listBooks(sortType);
+  auto sorted = bookStore.listBooks(sortType);
 
   std::cout << "Отсортировнные книги:" << std::endl;
-  for (Book *book : sorted) {
+  for (auto book : sorted) {
     std::cout << book->to_string() << std::endl;
   }
 }
@@ -152,13 +150,12 @@ void booksInPriceRange() {
   std::cout << "Максимальная цена: ";
   std::cin >> maxPrice;
 
-  std::vector<Book *> sorted =
-      bookStore.findBooksInPriceRange(minPrice, maxPrice);
+  auto sorted = bookStore.findBooksInPriceRange(minPrice, maxPrice);
   if (sorted.size() == 0) {
     std::cout << "Подходящих книг нет" << std::endl;
   } else {
     std::cout << "Подходящие книги:" << std::endl;
-    for (Book *book : sorted) {
+    for (auto book : sorted) {
       std::cout << book->to_string() << std::endl;
     }
   }

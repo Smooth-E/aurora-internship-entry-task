@@ -2,30 +2,29 @@
 #define BookStore_H
 
 #include "Book.h"
+#include <memory>
 #include <string>
 #include <vector>
 
-enum class SortType { NY_NAME, BY_AUTHOR, BY_PUBLICATION_YEAR };
+enum class SortType { BY_NAME, BY_AUTHOR, BY_PUBLICATION_YEAR };
 
 class BookStore {
 private:
-  std::vector<Book *> books;
+  std::vector<std::shared_ptr<Book>> books;
 
 public:
   BookStore();
 
-  ~BookStore();
+  int addBook(std::shared_ptr<Book> _book);
 
-  int addBook(Book *_book);
+  std::shared_ptr<Book> removeBook(std::string _title);
 
-  Book *removeBook(std::string _title);
+  std::shared_ptr<Book> findBook(std::string _title) const;
 
-  Book *findBook(std::string _title) const;
+  std::vector<std::shared_ptr<Book>> listBooks(SortType sortType) const;
 
-  std::vector<Book *> listBooks(SortType sortType) const;
-
-  std::vector<Book *> findBooksInPriceRange(float minPrice,
-                                            float maxPrice) const;
+  std::vector<std::shared_ptr<Book>>
+  findBooksInPriceRange(float minPrice, float maxPrice) const;
 };
 
 #endif

@@ -1,20 +1,13 @@
 #include "BookStore.h"
 #include "Book.h"
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
 
 BookStore::BookStore() { this->books = {}; }
 
-// It would be better to use smart pointers because this does not enusre some
-// books are not used outside of the store
-BookStore::~BookStore() {
-  for (Book *book : books) {
-    delete book;
-  }
-}
-
-int BookStore::addBook(Book *_book) {
+int BookStore::addBook(std::shared_ptr<Book> _book) {
   if (findBook(_book->getName()) != NULL) {
     return 1;
   }
@@ -23,10 +16,10 @@ int BookStore::addBook(Book *_book) {
   return 0;
 }
 
-Book *BookStore::removeBook(std::string _title) {
+std::shared_ptr<Book> BookStore::removeBook(std::string _title) {
   for (int i = 0; i < books.size(); i++) {
     if (books.at(i)->getName() == _title) {
-      Book *removed = books.at(i);
+      std::shared_ptr<Book> removed = books.at(i);
       books.erase(books.begin() + i);
       return removed;
     }
@@ -35,7 +28,7 @@ Book *BookStore::removeBook(std::string _title) {
   return NULL;
 }
 
-Book *BookStore::findBook(std::string _title) const {
+std::shared_ptr<Book> BookStore::findBook(std::string _title) const {
   for (int i = 0; i < books.size(); i++) {
     if (books.at(i)->getName() == _title) {
       return books.at(i);
@@ -45,13 +38,15 @@ Book *BookStore::findBook(std::string _title) const {
   return NULL;
 }
 
-std::vector<Book *> BookStore::listBooks(SortType sortType) const {
-  std::vector<Book *> sorted(books);
+std::vector<std::shared_ptr<Book>>
+BookStore::listBooks(SortType sortType) const {
+  std::vector<std::shared_ptr<Book>> sorted(books);
 
   std::sort(sorted.begin(), sorted.end(),
-            [sortType](const Book *book1, const Book *book2) {
+            [sortType](const std::shared_ptr<Book> book1,
+                       const std::shared_ptr<Book> book2) {
               switch (sortType) {
-              case SortType::NY_NAME:
+              case SortType::BY_NAME:
                 return book1->getName() < book2->getName();
               case SortType::BY_AUTHOR:
                 return book1->getAuthor() < book2->getAuthor();
@@ -66,11 +61,11 @@ std::vector<Book *> BookStore::listBooks(SortType sortType) const {
   return sorted;
 }
 
-std::vector<Book *> BookStore::findBooksInPriceRange(float minPrice,
-                                                     float maxPrice) const {
-  std::vector<Book *> found = {};
+std::vector<std::shared_ptr<Book>>
+BookStore::findBooksInPriceRange(float minPrice, float maxPrice) const {
+  std::vector<std::shared_ptr<Book>> found = {};
 
-  for (Book *book : books) {
+  for (std::shared_ptr<Book> book : books) {
     if (minPrice <= book->getPrice() && book->getPrice() <= maxPrice) {
       found.push_back(book);
     }
