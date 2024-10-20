@@ -1,6 +1,9 @@
 #include "Book.h"
 #include "BookStore.h"
+#include <algorithm>
+#include <cctype>
 #include <iostream>
+#include <limits>
 #include <memory>
 
 BookStore bookStore;
@@ -53,16 +56,107 @@ int main() {
   return 0;
 }
 
-void addBook() {
-  std::string author;
-  std::string name;
-  int year;
-  float price;
+int inputInteger(const std::string &message) {
+  while (true) {
+    try {
+      std::size_t position;
+      std::string input;
+      std::getline(std::cin, input);
+      int inetger = std::stoi(input, &position);
 
-  std::cout
-      << "Введите имя автора книги, название книги, год публикации и её цену:"
-      << std::endl;
-  std::cin >> author >> name >> year >> price;
+      if (input.length() == position) {
+        return inetger;
+      }
+    } catch (std::invalid_argument &exception) {
+      // Do nothing, wrong input
+    } catch (std::out_of_range &exception) {
+      // Do nothing, wrong input
+    }
+    std::cout << message << std::endl;
+  }
+}
+
+float inputFloat(const std::string &message) {
+  while (true) {
+    try {
+      std::size_t position;
+      std::string input;
+      std::getline(std::cin, input);
+      float floating = std::stof(input, &position);
+
+      if (input.length() == position) {
+        return floating;
+      }
+    } catch (std::invalid_argument &exception) {
+      // Do nothing, wrong input
+    } catch (std::out_of_range &exception) {
+      // Do nothing, wrong input
+    }
+    std::cout << message << std::endl;
+  }
+}
+
+void discardLeftoverNewlines() {
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+std::string trimmedString(const std::string &sequence) {
+  auto start = std::find_if_not(
+      sequence.begin(), sequence.end(),
+      [sequence](unsigned char character) { return std::isspace(character); });
+
+  auto end = std::find_if_not(sequence.rbegin(), sequence.rend(),
+                              [sequence](unsigned char character) {
+                                return std::isspace(character);
+                              })
+                 .base();
+
+  if (start >= end) {
+    return "";
+  }
+
+  return std::string(start, end);
+}
+
+std::string inputTrimmedLine() {
+  std::string dirty;
+  std::getline(std::cin, dirty);
+  return trimmedString(dirty);
+}
+
+std::string inputNotEmptyTrimmedLine(const std::string &message) {
+  std::string uncheckedString = "";
+  while (true) {
+    uncheckedString = inputTrimmedLine();
+
+    if (uncheckedString.empty()) {
+      std::cout << message << std::endl;
+      continue;
+    }
+
+    return uncheckedString;
+  }
+}
+
+std::string inputNotEmptyTrimmedLine() {
+  return inputNotEmptyTrimmedLine("Поле не может быть пустым");
+}
+
+void addBook() {
+  std::cout << "Добавление книги." << std::endl;
+
+  std::cout << "Автор: ";
+  discardLeftoverNewlines();
+  std::string author = inputNotEmptyTrimmedLine();
+
+  std::cout << "Название: ";
+  std::string name = inputNotEmptyTrimmedLine();
+
+  std::cout << "Год публикации: ";
+  int year = inputInteger("Год публикации длжен быть цифрой");
+
+  std::cout << "Цена: ";
+  float price = inputFloat("Цена должна быть вещественным числом");
 
   std::shared_ptr<Book> book(new Book(name, author, year, price));
   if (bookStore.addBook(book) == 0) {
@@ -73,9 +167,8 @@ void addBook() {
 }
 
 void removeBook() {
-  std::string title;
   std::cout << "Введите название книги, которую хотите удалить" << std::endl;
-  std::cin >> title;
+  std::string title = inputNotEmptyTrimmedLine();
 
   auto removed = bookStore.removeBook(title);
   if (removed != NULL) {
@@ -87,8 +180,7 @@ void removeBook() {
 
 void searchBook() {
   std::cout << "Введите название книги для поиска" << std::endl;
-  std::string name;
-  std::cin >> name;
+  std::string name = inputNotEmptyTrimmedLine();
 
   auto book = bookStore.findBook(name);
   if (book == NULL) {
@@ -109,7 +201,7 @@ void listBooks() {
     std::cout << "1. По названию" << std::endl;
     std::cout << "2. По имени автора" << std::endl;
     std::cout << "3. По году публикации" << std::endl;
-    std::cin >> choice;
+    choice = inputInteger("Номер способа сортировки должен быть цифрой");
 
     bool validChoice = true;
     switch (choice) {
@@ -144,11 +236,12 @@ void listBooks() {
 void booksInPriceRange() {
   std::cout << "Введите диапозон цен на книги." << std::endl;
 
-  float minPrice, maxPrice;
   std::cout << "Миинимальная цена: ";
-  std::cin >> minPrice;
+  float minPrice =
+      inputFloat("Минимальная цена должна быть вещественным числом");
   std::cout << "Максимальная цена: ";
-  std::cin >> maxPrice;
+  float maxPrice =
+      inputFloat("Максимальная цена должна быть вещественным числом");
 
   auto sorted = bookStore.findBooksInPriceRange(minPrice, maxPrice);
   if (sorted.size() == 0) {
