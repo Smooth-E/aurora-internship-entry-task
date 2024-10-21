@@ -15,11 +15,11 @@ private:
 public:
   BookStore();
 
-  int addBook(const std::shared_ptr<Book>& _book);
+  int addBook(const std::shared_ptr<Book> &_book);
 
-  std::shared_ptr<Book> removeBook(const std::string& _title);
+  std::shared_ptr<Book> removeBook(const std::string &_title);
 
-  std::shared_ptr<Book> findBook(const std::string& _title) const;
+  std::shared_ptr<Book> findBook(const std::string &_title) const;
 
   std::vector<std::shared_ptr<Book>> listBooks(SortType sortType) const;
 
