@@ -7,8 +7,6 @@ int inputInteger(const std::string &message);
 
 float inputFloat(const std::string &message);
 
-void discardLeftoverNewlines();
-
 std::string trimmedString(const std::string &sequence);
 
 std::string inputTrimmedLine();

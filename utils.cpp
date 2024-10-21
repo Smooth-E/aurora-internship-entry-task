@@ -43,10 +43,6 @@ float inputFloat(const std::string &message) {
   }
 }
 
-void discardLeftoverNewlines() {
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
 std::string trimmedString(const std::string &sequence) {
   auto start = std::find_if_not(
       sequence.begin(), sequence.end(),

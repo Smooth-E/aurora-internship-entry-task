@@ -27,8 +27,7 @@ int main() {
     std::cout << "5. Найти книги в ценовом диапазоне" << std::endl;
     std::cout << "6. Выйти" << std::endl;
 
-    int command;
-    std::cin >> command;
+    int command = inputInteger("Команда должна быть цифрой");
 
     switch (command) {
     case 1:
@@ -59,7 +58,6 @@ void addBook() {
   std::cout << "Добавление книги." << std::endl;
 
   std::cout << "Автор: ";
-  discardLeftoverNewlines();
   std::string author = inputNotEmptyTrimmedLine();
 
   std::cout << "Название: ";
@@ -141,7 +139,7 @@ void listBooks() {
   auto sorted = bookStore.listBooks(sortType);
 
   std::cout << "Отсортированные книги:" << std::endl;
-  for (const auto& book : sorted) {
+  for (const auto &book : sorted) {
     std::cout << book->to_string() << std::endl;
   }
 }
@@ -161,7 +159,7 @@ void booksInPriceRange() {
     std::cout << "Подходящих книг нет" << std::endl;
   } else {
     std::cout << "Подходящие книги:" << std::endl;
-    for (const auto& book : sorted) {
+    for (const auto &book : sorted) {
       std::cout << book->to_string() << std::endl;
     }
   }
