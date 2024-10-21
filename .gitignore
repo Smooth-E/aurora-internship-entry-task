@@ -1,2 +1,41 @@
+# Ignore CMake build directories
+cmake-build-debug/
+cmake-build-release/
+cmake-build-*/
+
+# Ignore CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ignore compiled object files and libraries
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.a
+*.lib
+
+# Ignore CLion-specific files
+.idea/
+*.iml
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+
+# Ignore generated files from tests or output
+tests_output/
+*.DS_Store  # macOS generated file
+
+# Files for VSCode workflow
 .vscode
 a.out
