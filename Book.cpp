@@ -1,10 +1,9 @@
 #include "Book.h"
-#include <iostream>
 #include <string>
 
 const int Book::CURRENT_YEAR = 2024;
 
-Book::Book(std::string _name, std::string _author, int _publicationYear,
+Book::Book(const std::string &_name, const std::string &_author, int _publicationYear,
            float _price) {
   this->name = _name;
   this->author = _author;
@@ -14,7 +13,7 @@ Book::Book(std::string _name, std::string _author, int _publicationYear,
 
 std::string Book::getName() const { return this->name; }
 
-int Book::setName(std::string _name) {
+int Book::setName(const std::string& _name) {
   if (_name.empty()) {
     return 1;
   }
@@ -25,7 +24,7 @@ int Book::setName(std::string _name) {
 
 std::string Book::getAuthor() const { return this->author; }
 
-int Book::setAuthor(std::string _author) {
+int Book::setAuthor(const std::string& _author) {
   if (_author.empty()) {
     return 1;
   }

@@ -2,7 +2,6 @@
 #include "BookStore.h"
 #include "utils.h"
 #include <algorithm>
-#include <cctype>
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -54,7 +53,6 @@ int main() {
       break;
     }
   }
-  return 0;
 }
 
 void addBook() {
@@ -68,7 +66,7 @@ void addBook() {
   std::string name = inputNotEmptyTrimmedLine();
 
   std::cout << "Год публикации: ";
-  int year = inputInteger("Год публикации длжен быть цифрой");
+  int year = inputInteger("Год публикации должен быть цифрой");
 
   std::cout << "Цена: ";
   float price = inputFloat("Цена должна быть вещественным числом");
@@ -77,7 +75,7 @@ void addBook() {
   if (bookStore.addBook(book) == 0) {
     std::cout << "Книга добавлена" << std::endl;
   } else {
-    std::cout << "Книга с таким названием уже сущесвует" << std::endl;
+    std::cout << "Книга с таким названием уже существует" << std::endl;
   }
 }
 
@@ -86,7 +84,7 @@ void removeBook() {
   std::string title = inputNotEmptyTrimmedLine();
 
   auto removed = bookStore.removeBook(title);
-  if (removed != NULL) {
+  if (removed != nullptr) {
     std::cout << "Книга успешно удалена" << std::endl;
   } else {
     std::cout << "Такой книги в хранилище нет" << std::endl;
@@ -98,7 +96,7 @@ void searchBook() {
   std::string name = inputNotEmptyTrimmedLine();
 
   auto book = bookStore.findBook(name);
-  if (book == NULL) {
+  if (book == nullptr) {
     std::cout << "Ничего не найдено" << std::endl;
   } else {
     std::cout << "Что-то нашлось:" << std::endl
@@ -107,7 +105,7 @@ void searchBook() {
 }
 
 void listBooks() {
-  int choice = -1;
+  int choice;
   SortType sortType;
 
   while (true) {
@@ -142,16 +140,16 @@ void listBooks() {
 
   auto sorted = bookStore.listBooks(sortType);
 
-  std::cout << "Отсортировнные книги:" << std::endl;
-  for (auto book : sorted) {
+  std::cout << "Отсортированные книги:" << std::endl;
+  for (const auto& book : sorted) {
     std::cout << book->to_string() << std::endl;
   }
 }
 
 void booksInPriceRange() {
-  std::cout << "Введите диапозон цен на книги." << std::endl;
+  std::cout << "Введите диапазон цен на книги." << std::endl;
 
-  std::cout << "Миинимальная цена: ";
+  std::cout << "Минимальная цена: ";
   float minPrice =
       inputFloat("Минимальная цена должна быть вещественным числом");
   std::cout << "Максимальная цена: ";
@@ -159,11 +157,11 @@ void booksInPriceRange() {
       inputFloat("Максимальная цена должна быть вещественным числом");
 
   auto sorted = bookStore.findBooksInPriceRange(minPrice, maxPrice);
-  if (sorted.size() == 0) {
+  if (sorted.empty()) {
     std::cout << "Подходящих книг нет" << std::endl;
   } else {
     std::cout << "Подходящие книги:" << std::endl;
-    for (auto book : sorted) {
+    for (const auto& book : sorted) {
       std::cout << book->to_string() << std::endl;
     }
   }

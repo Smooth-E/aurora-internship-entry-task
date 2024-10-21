@@ -2,7 +2,6 @@
 #include <cctype>
 #include <iostream>
 #include <limits>
-#include <memory>
 
 int inputInteger(const std::string &message) {
   while (true) {
@@ -10,10 +9,10 @@ int inputInteger(const std::string &message) {
       std::size_t position;
       std::string input;
       std::getline(std::cin, input);
-      int inetger = std::stoi(input, &position);
+      int integer = std::stoi(input, &position);
 
       if (input.length() == position) {
-        return inetger;
+        return integer;
       }
     } catch (std::invalid_argument &exception) {
       // Do nothing, wrong input
@@ -73,7 +72,7 @@ std::string inputTrimmedLine() {
 }
 
 std::string inputNotEmptyTrimmedLine(const std::string &message) {
-  std::string uncheckedString = "";
+  std::string uncheckedString;
   while (true) {
     uncheckedString = inputTrimmedLine();
 
